@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>정보 특임 교원 주제 공유 연수 | CT2.0 문항 개발 발표</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Pretendard / Noto Sans KR -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Noto Sans KR', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom scrollbar for sidebar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .iframe-container {
+            height: calc(100vh - 12rem);
+        }
+        @media (max-width: 768px) {
+            .iframe-container {
+                height: calc(100vh - 16rem);
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-100 font-sans text-slate-800 antialiased h-screen flex flex-col overflow-hidden">
+
+    <header class="bg-slate-900 text-white border-b border-slate-800 shadow-lg z-20 flex-shrink-0">
+        <div class="px-4 py-3 md:px-6 flex items-center justify-between">
+            <!-- Title & Subtitle -->
+            <div class="flex items-center space-x-3">
+                <div class="bg-gradient-to-tr font-bold from-brand-500 to-emerald-400 p-2.5 rounded-xl shadow-md text-white flex items-center justify-center">
+                    <i class="fa-solid fa-laptop-code text-xl"></i>
+                </div>
+                <div>
+                    <div class="flex items-center space-x-2">
+                        <span class="bg-brand-500/20 text-brand-400 text-xs px-2 py-0.5 rounded font-semibold border border-brand-500/30">2026 정보 특임 교원 주제 공유 연수</span>
+                        <span class="hidden md:inline-block text-xs text-slate-400">| 초중등 컴퓨팅 사고력(CT2.0)</span>
+                    </div>
+                    <h1 class="text-base md:text-xl font-bold tracking-tight text-slate-100">
+                        인지특성을 반영한 초중등 CT2.0 문항 개발
+                    </h1>
+                </div>
+            </div>
+
+            <!-- Header Quick Controls -->
+            <div class="flex items-center space-x-2 md:space-x-3">
+                <button id="openNewWindowBtn" onclick="openCurrentInNewTab()" class="hidden sm:flex items-center space-x-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs md:text-sm px-3 py-2 rounded-lg border border-slate-700 transition">
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    <span class="hidden md:inline">새 창에서 보기</span>
+                </button>
+                <button onclick="toggleFullscreen()" class="flex items-center space-x-1.5 bg-brand-600 hover:bg-brand-500 text-white text-xs md:text-sm px-3.5 py-2 rounded-lg font-medium shadow-sm transition">
+                    <i class="fa-solid fa-expand" id="fullscreenIcon"></i>
+                    <span class="hidden sm:inline" id="fullscreenText">전체 화면</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex flex-1 overflow-hidden relative">
+
+        <!-- Mobile Sidebar Toggle Overlay -->
+        <div id="mobileBackdrop" onclick="toggleMobileMenu()" class="fixed inset-0 bg-slate-900/60 z-20 hidden md:hidden transition-opacity"></div>
+
+        <!-- Left Sidebar -->
+        <aside id="sidebar" class="w-80 md:w-80 bg-white border-r border-slate-200 flex flex-col z-30 fixed md:relative inset-y-0 left-0 transform -translate-x-full md:translate-x-0 transition-transform duration-200 ease-in-out shadow-xl md:shadow-none">
+            
+            <!-- Sidebar Header / Category Badge -->
+            <div class="p-4 border-b border-slate-100 bg-slate-50 flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-layer-group text-brand-600"></i>
+                    <span class="font-bold text-slate-700 text-sm">발표 문항 & 플랫폼 목록</span>
+                </div>
+                <span class="text-xs bg-slate-200 text-slate-600 px-2 py-0.5 rounded-full font-semibold">4개 항목</span>
+            </div>
+
+            <!-- Navigation Items List -->
+            <div class="flex-1 overflow-y-auto p-3 space-y-4">
+                
+                <!-- Group 1: HTML 직접 구현 문항 -->
+                <div>
+                    <div class="px-2 py-1 text-xs font-bold text-slate-400 tracking-wider uppercase flex items-center justify-between">
+                        <span>인터랙티브 HTML 문항</span>
+                        <span class="bg-emerald-100 text-emerald-700 text-[10px] px-1.5 py-0.5 rounded">내장 2종</span>
+                    </div>
+                    <div class="mt-2 space-y-2">
+                        <!-- Item 1 -->
+                        <button id="nav-btn-1" onclick="switchTab(0)" class="nav-item w-full text-left p-3 rounded-xl border transition-all flex flex-col group relative bg-white border-slate-200 hover:border-brand-300 hover:bg-slate-50">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
+                                    <i class="fa-solid fa-code text-[10px] mr-1"></i>HTML 문항 1
+                                </span>
+                                <span class="text-[11px] text-slate-400">초등 5학년</span>
+                            </div>
+                            <h3 class="font-bold text-slate-800 text-sm group-hover:text-brand-600 transition-colors line-clamp-1">
+                                자율주행 정수 로봇 길 찾기
+                            </h3>
+                            <p class="text-xs text-slate-500 mt-1 line-clamp-1">
+                                #초등5학년_심화 #알고리즘_최적화
+                            </p>
+                        </button>
+
+                        <!-- Item 2 -->
+                        <button id="nav-btn-2" onclick="switchTab(1)" class="nav-item w-full text-left p-3 rounded-xl border transition-all flex flex-col group relative bg-white border-slate-200 hover:border-brand-300 hover:bg-slate-50">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-200">
+                                    <i class="fa-solid fa-code text-[10px] mr-1"></i>HTML 문항 2
+                                </span>
+                                <span class="text-[11px] text-slate-400">초중등 공통</span>
+                            </div>
+                            <h3 class="font-bold text-slate-800 text-sm group-hover:text-brand-600 transition-colors line-clamp-1">
+                                암호 생성기 분석실
+                            </h3>
+                            <p class="text-xs text-slate-500 mt-1 line-clamp-1">
+                                #규칙추론 #역변환
+                            </p>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Group 2: 외부 웹 링크 연동 -->
+                <div>
+                    <div class="px-2 py-1 text-xs font-bold text-slate-400 tracking-wider uppercase flex items-center justify-between">
+                        <span>외부 플랫폼 연동</span>
+                        <span class="bg-sky-100 text-sky-700 text-[10px] px-1.5 py-0.5 rounded">웹 링크 2종</span>
+                    </div>
+                    <div class="mt-2 space-y-2">
+                        <!-- Item 3 -->
+                        <button id="nav-btn-3" onclick="switchTab(2)" class="nav-item w-full text-left p-3 rounded-xl border transition-all flex flex-col group relative bg-white border-slate-200 hover:border-brand-300 hover:bg-slate-50">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="text-xs font-bold text-purple-600 bg-purple-50 px-2 py-0.5 rounded-md border border-purple-200">
+                                    <i class="fa-solid fa-globe text-[10px] mr-1"></i>외부 웹 링크 1
+                                </span>
+                                <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-slate-400"></i>
+                            </div>
+                            <h3 class="font-bold text-slate-800 text-sm group-hover:text-brand-600 transition-colors line-clamp-1">
+                                바이브코딩 필란독 CT2.0
+                            </h3>
+                            <p class="text-xs text-slate-500 mt-1 truncate">
+                                y2round-git.github.io/Vibecoding_pilandokct20
+                            </p>
+                        </button>
+
+                        <!-- Item 4 -->
+                        <button id="nav-btn-4" onclick="switchTab(3)" class="nav-item w-full text-left p-3 rounded-xl border transition-all flex flex-col group relative bg-white border-slate-200 hover:border-brand-300 hover:bg-slate-50">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="text-xs font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200">
+                                    <i class="fa-solid fa-globe text-[10px] mr-1"></i>외부 웹 링크 2
+                                </span>
+                                <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-slate-400"></i>
+                            </div>
+                            <h3 class="font-bold text-slate-800 text-sm group-hover:text-brand-600 transition-colors line-clamp-1">
+                                초중등 CT2.0 문제집 플랫폼
+                            </h3>
+                            <p class="text-xs text-slate-500 mt-1 truncate">
+                                devvbear.github.io/ct
+                            </p>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Presenter Footer -->
+            <div class="p-4 border-t border-slate-200 bg-slate-50">
+                <div class="flex items-center space-x-3">
+                    <div class="w-9 h-9 rounded-full bg-slate-800 text-white flex items-center justify-center font-bold text-xs shadow-inner">
+                        발표
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-slate-800">정보 특임 교원 발표자</p>
+                        <p class="text-[11px] text-slate-500">인지특성 기반 문항 분석 팀</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="flex-1 bg-slate-100 flex flex-col overflow-hidden">
+            
+            <!-- Mobile Menu Toggle Header Bar -->
+            <div class="md:hidden bg-white border-b border-slate-200 px-4 py-2 flex items-center justify-between">
+                <button onclick="toggleMobileMenu()" class="text-slate-600 hover:text-slate-900 focus:outline-none p-1.5 rounded-lg bg-slate-100">
+                    <i class="fa-solid fa-bars text-lg"></i>
+                    <span class="text-xs ml-1 font-bold">메뉴 목록</span>
+                </button>
+                <span id="mobileCurrentTitle" class="text-xs font-bold text-slate-700 truncate max-w-[200px]">
+                    자율주행 정수 로봇 길 찾기
+                </span>
+            </div>
+
+            <!-- Display Header & Quick Status Bar -->
+            <div class="bg-white px-6 py-3 border-b border-slate-200 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div>
+                    <div class="flex items-center space-x-2">
+                        <span id="displayBadge" class="text-xs font-bold px-2 py-0.5 rounded-md">HTML 문항</span>
+                        <h2 id="displayTitle" class="text-lg font-bold text-slate-900">자율주행 정수 로봇 길 찾기</h2>
+                    </div>
+                    <p id="displayDescription" class="text-xs text-slate-500 mt-0.5">
+                        인지특성을 반영한 4단계 마스터 미션 적용 문항
+                    </p>
+                </div>
+
+                <!-- Action Controls for Content Area -->
+                <div class="flex items-center space-x-2 self-end sm:self-auto">
+                    <button onclick="reloadIframe()" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg border border-slate-300 font-medium transition flex items-center space-x-1">
+                        <i class="fa-solid fa-rotate-right text-[11px]"></i>
+                        <span>다시 로드</span>
+                    </button>
+                    <a id="externalDirectLink" href="#" target="_blank" class="text-xs bg-brand-50 hover:bg-brand-100 text-brand-700 px-3 py-1.5 rounded-lg border border-brand-200 font-medium transition flex items-center space-x-1">
+                        <span>직접 접속</span>
+                        <i class="fa-solid fa-external-link text-[11px]"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Dynamic Viewer Area (Iframe Workspace) -->
+            <div class="flex-1 p-3 md:p-5 overflow-hidden flex flex-col relative">
+                
+                <!-- Security / Loading Notice Box for external links -->
+                <div id="externalNotice" class="hidden mb-3 bg-amber-50 border border-amber-200 rounded-lg p-2.5 text-xs text-amber-800 flex items-center justify-between">
+                    <div class="flex items-center space-x-2">
+                        <i class="fa-solid fa-triangle-exclamation text-amber-600"></i>
+                        <span>외부 웹사이트 연결 시 보안 정책(X-Frame-Options)에 따라 화면이 차단될 수 있습니다. 차단 시 오른쪽 상단 [직접 접속] 버튼을 이용해주세요.</span>
+                    </div>
+                    <button onclick="document.getElementById('externalNotice').classList.add('hidden')" class="text-amber-500 hover:text-amber-800 font-bold ml-2">
+                        &times;
+                    </button>
+                </div>
+
+                <!-- Main Content Iframe Window -->
+                <div class="w-full flex-1 bg-white rounded-xl border border-slate-300 shadow-md overflow-hidden relative">
+                    <iframe id="mainViewer" class="w-full h-full border-0" title="Content Viewer"></iframe>
+                </div>
+
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        // Item 1 Embed HTML Content
+        const htmlCode1 = `<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[초등 5학년 심화] 자율주행 정수 로봇 길 찾기 - 마스터 미션 추가</title>
+    <style>
+        body { font-family: 'Pretendard', 'Malgun Gothic', sans-serif; background-color: #f0fdf4; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; }
+        .test-cover { background-color: #ffffff; border-radius: 16px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08); max-width: 750px; width: 100%; overflow: hidden; border-top: 8px solid #059669; }
+        .cover-header { background-color: #ecfdf5; padding: 40px 30px; text-align: center; border-bottom: 1px solid #d1fae5; }
+        .cover-header h1 { margin: 0 0 15px 0; color: #065f46; font-size: 1.8rem; letter-spacing: -0.5px; }
+        .cover-header p { color: #047857; line-height: 1.6; margin: 0; font-size: 1.1rem; word-break: keep-all; font-weight: bold; }
+        .tag-container { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
+        .tag { padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; color: #065f46; background-color: #a7f3d0; border: 1px solid #6ee7b7;}
+        .cover-body { padding: 40px 30px; text-align: center; }
+        .btn-start { background-color: #059669; color: white; border: none; padding: 15px 35px; font-size: 1.2rem; font-weight: bold; border-radius: 30px; cursor: pointer; transition: background-color 0.3s ease; box-shadow: 0 4px 6px rgba(5, 150, 105, 0.2); }
+        .btn-start:hover { background-color: #047857; transform: translateY(-2px); }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(15, 23, 42, 0.75); z-index: 1000; justify-content: center; align-items: center; padding: 20px; }
+        .modal-content { background-color: white; padding: 30px; border-radius: 16px; max-width: 850px; width: 100%; max-height: 95vh; overflow-y: auto; text-align: left; position: relative; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); }
+        .modal-close { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; cursor: pointer; color: #94a3b8; border: none; background: none; }
+        .modal-close:hover { color: #0f172a; }
+        .step-badge { display: inline-block; background-color: #059669; color: white; padding: 6px 14px; border-radius: 20px; font-size: 0.95rem; font-weight: bold; margin-bottom: 12px; }
+        .problem-title { font-size: 1.4rem; color: #0f172a; margin-top: 0; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 15px;}
+        .specs-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 1rem; }
+        .specs-table th, .specs-table td { border: 1px solid #cbd5e1; padding: 10px; text-align: center; }
+        .specs-table th { background-color: #f1f5f9; color: #334155; }
+        .specs-table td strong { color: #059669; }
+        .problem-text { font-size: 1.05rem; color: #334155; line-height: 1.7; background: #f8fafc; padding: 18px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #e2e8f0;}
+        .map-container { margin: 20px 0; background: #ffffff; border-radius: 12px; border: 2px solid #e2e8f0; padding: 0; overflow: hidden; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);}
+        .answer-section { margin-top: 25px; padding-top: 20px; border-top: 2px dashed #cbd5e1; text-align: center; }
+        .answer-input { padding: 14px; font-size: 1.05rem; width: 60%; border: 2px solid #cbd5e1; border-radius: 8px; outline: none; transition: border-color 0.3s; margin-bottom: 10px;}
+        .answer-input:focus { border-color: #059669; }
+        .btn-submit { background-color: #2563eb; color: white; border: none; padding: 14px 24px; font-size: 1.05rem; font-weight: bold; border-radius: 8px; cursor: pointer; margin-left: 10px; }
+        .btn-submit:hover { background-color: #1d4ed8; }
+        .btn-next { background-color: #059669; color: white; border: none; padding: 14px 20px; font-size: 1.05rem; font-weight: bold; border-radius: 8px; cursor: pointer; margin-top: 15px; display: none; width: 100%;}
+        .btn-next:hover { background-color: #047857; }
+        #feedbackMessage { font-weight: bold; font-size: 1.05rem; margin-top: 15px; word-break: keep-all; line-height: 1.6; text-align: left; padding: 15px; border-radius: 8px;}
+        .correct { background-color: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0;}
+        .incorrect { background-color: #fef2f2; color: #991b1b; border: 1px solid #fecaca;}
+    </style>
+</head>
+<body>
+    <div class="test-cover">
+        <div class="cover-header">
+            <div class="tag-container">
+                <span class="tag">#초등5학년_심화</span>
+                <span class="tag">#알고리즘_최적화</span>
+                <span class="tag">#최고기록_도전</span>
+            </div>
+            <h1>해반천 자율주행 정수 로봇 대작전</h1>
+            <p>4단계 마스터 미션이 추가되었습니다. 한계를 시험해 보세요!</p>
+        </div>
+        <div class="cover-body">
+            <p style="color: #475569; margin-bottom: 30px; font-size: 1rem; line-height: 1.6;">
+                환경 연구소에서 오염된 해반천을 맑게 하기 위해 3대의 로봇을 보냈습니다.<br>
+                각 로봇은 움직일 때 쓰는 <strong>[배터리]</strong>와 물을 맑게 하는 <strong>[정수 필터]</strong> 양이 다릅니다.<br>
+                로봇이 무사히 임무를 마치고 <strong>종료 기지(End)</strong>로 돌아올 수 있도록 알고리즘을 설계해 주세요!
+            </p>
+            <button class="btn-start" onclick="openModal()">미션 시작하기 🚀</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="problemModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <span class="step-badge" id="stepBadge">미션 1</span>
+            <h2 class="problem-title" id="problemTitle">로딩중...</h2>
+            <table class="specs-table">
+                <tr><th>로봇 이름</th><th>이동 배터리 (최대)</th><th>정수 필터 (최대)</th></tr>
+                <tr><td><strong>로봇 알파</strong></td><td>40</td><td>50</td></tr>
+                <tr><td><strong>로봇 베타</strong></td><td>30</td><td>70</td></tr>
+                <tr><td><strong>로봇 감마</strong></td><td>30</td><td>100</td></tr>
+            </table>
+            <div class="map-container">
+                <svg viewBox="0 0 760 350" style="width: 100%; height: auto; display: block; background-color: #f8fafc;">
+                    <g stroke="#94a3b8" stroke-width="4" stroke-dasharray="6,4">
+                        <line x1="70" y1="175" x2="180" y2="75" /><line x1="70" y1="175" x2="180" y2="275" /><line x1="180" y1="75" x2="290" y2="175" /><line x1="180" y1="275" x2="290" y2="175" /><line x1="180" y1="275" x2="400" y2="275" /><line x1="290" y1="175" x2="400" y2="75" /><line x1="290" y1="175" x2="400" y2="275" /><line x1="400" y1="75" x2="400" y2="275" /><line x1="400" y1="75" x2="510" y2="175" /><line x1="400" y1="275" x2="510" y2="175" /><line x1="400" y1="75" x2="650" y2="175" /><line x1="510" y1="175" x2="650" y2="175" />
+                    </g>
+                    <g font-size="12" font-weight="bold" fill="#475569" text-anchor="middle">
+                        <rect x="100" y="115" width="60" height="20" fill="#ffffff" rx="10" stroke="#cbd5e1" stroke-width="2"/><text x="130" y="130">배터리 5</text>
+                        <rect x="100" y="215" width="65" height="20" fill="#ffffff" rx="10" stroke="#cbd5e1" stroke-width="2"/><text x="132" y="230">배터리 10</text>
+                        <rect x="205" y="115" width="60" height="20" fill="#ffffff" rx="10" stroke="#cbd5e1" stroke-width="2"/><text x="235" y="130">배터리 5</text>
+                        <rect x="205" y="215" width="60" height="20" fill="#ffffff" rx="10" stroke="#cbd5e1" stroke-width="2"/><text x="235" y="230">배터리 5</text>
+                        <rect x="260" y="265" width="65" height="20" fill="#ffffff" rx="10" stroke="#cbd5e1" stroke-width="2"/><text x="292" y="280">배터리 15</text>
+                        <rect x="315" y="115" width="60" height="20" fill="#ffffff" rx="10" stroke="#cbd5e1" stroke-width="2"/><text x="345" y="130">배터리 5</text>
+                        <rect x="315" y="215" width="65" height="20" fill="#ffffff" rx="10" stroke="#cbd5e1" stroke-width="2"/><text x="347" y="230">배터리 10</text>
+                        <rect x="367" y="165" width="65" height="20" fill="#ffffff" rx="10" stroke="#cbd5e1" stroke-width="2"/><text x="400" y="180">배터리 10</text>
+                        <rect x="425" y="115" width="65" height="20" fill="#ffffff" rx="10" stroke="#cbd5e1" stroke-width="2"/><text x="457" y="130">배터리 10</text>
+                        <rect x="425" y="215" width="60" height="20" fill="#ffffff" rx="10" stroke="#cbd5e1" stroke-width="2"/><text x="455" y="230">배터리 5</text>
+                        <rect x="550" y="165" width="60" height="20" fill="#ffffff" rx="10" stroke="#cbd5e1" stroke-width="2"/><text x="580" y="180">배터리 5</text>
+                        <rect x="490" y="115" width="65" height="20" fill="#ffffff" rx="10" stroke="#cbd5e1" stroke-width="2"/><text x="522" y="130">배터리 10</text>
+                    </g>
+                    <circle cx="70" cy="175" r="35" fill="#2563eb" stroke="#bfdbfe" stroke-width="4"/><text x="70" y="180" fill="white" font-weight="bold" font-size="16" text-anchor="middle">Start</text>
+                    <circle cx="180" cy="75" r="38" fill="#10b981" stroke="#d1fae5" stroke-width="4"/><text x="180" y="70" fill="white" font-weight="bold" font-size="20" text-anchor="middle">A</text><text x="180" y="90" fill="#d1fae5" font-size="12" font-weight="bold" text-anchor="middle">오염 10</text>
+                    <circle cx="180" cy="275" r="38" fill="#10b981" stroke="#d1fae5" stroke-width="4"/><text x="180" y="270" fill="white" font-weight="bold" font-size="20" text-anchor="middle">B</text><text x="180" y="290" fill="#d1fae5" font-size="12" font-weight="bold" text-anchor="middle">오염 20</text>
+                    <circle cx="290" cy="175" r="38" fill="#10b981" stroke="#d1fae5" stroke-width="4"/><text x="290" y="170" fill="white" font-weight="bold" font-size="20" text-anchor="middle">C</text><text x="290" y="190" fill="#d1fae5" font-size="12" font-weight="bold" text-anchor="middle">오염 15</text>
+                    <circle cx="400" cy="75" r="38" fill="#10b981" stroke="#d1fae5" stroke-width="4"/><text x="400" y="70" fill="white" font-weight="bold" font-size="20" text-anchor="middle">E</text><text x="400" y="90" fill="#d1fae5" font-size="12" font-weight="bold" text-anchor="middle">오염 25</text>
+                    <circle cx="400" cy="275" r="42" fill="#ef4444" stroke="#fecaca" stroke-width="4"/><text x="400" y="270" fill="white" font-weight="bold" font-size="22" text-anchor="middle">D</text><text x="400" y="290" fill="#fecaca" font-size="12" font-weight="bold" text-anchor="middle">오염 30</text>
+                    <circle cx="510" cy="175" r="42" fill="#b91c1c" stroke="#fecaca" stroke-width="4"/><text x="510" y="170" fill="white" font-weight="bold" font-size="22" text-anchor="middle">F</text><text x="510" y="190" fill="#fecaca" font-size="12" font-weight="bold" text-anchor="middle">오염 40</text>
+                    <circle cx="650" cy="175" r="35" fill="#475569" stroke="#cbd5e1" stroke-width="4"/><text x="650" y="180" fill="white" font-weight="bold" font-size="16" text-anchor="middle">End</text>
+                </svg>
+            </div>
+            <div class="problem-text" id="problemText">문제 설명 로딩중...</div>
+            <div class="answer-section">
+                <input type="text" id="answerInput" class="answer-input" placeholder="" onkeypress="handleEnter(event)">
+                <button class="btn-submit" id="submitBtn" onclick="checkAnswer()">답안 제출</button>
+                <div id="feedbackMessage" style="display: none;"></div>
+                <button class="btn-next" id="nextBtn" onclick="nextStep()">다음 미션으로 ➔</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        const questions = [
+            { badge: "미션 1: 오류 찾기 (디버깅)", title: "로봇 감마는 왜 멈췄을까요?", text: "연구원님이 <strong>로봇 감마(배터리 30 / 정수 필터 100)</strong>에게 다음과 같이 명령을 내렸습니다.<br><br><code>명령: Start → B(지나감) → D(정수함) → F(정수함) → End 도착</code><br><br>정수 필터(70)는 충분한데 이 로봇은 도중에 멈추고 맙니다. <strong>이유가 무엇일까요?</strong><br>위 길을 모두 가기 위해 <strong>필요한 총 배터리 숫자(수치)</strong>와 <strong>'에너지 부족'</strong> (또는 배터리 부족)이라는 단어를 포함하여 적어주세요.", answerKeys: ["35", "부족"], successMsg: "💡 <strong>대단해요! 정확한 분석입니다.</strong><br>명령한 길의 총 배터리 소모량은 <strong>Start→B(10) + B→D(15) + D→F(5) + F→End(5) = 35</strong> 입니다.<br>로봇 감마의 배터리는 30밖에 없기 때문에 중간에 <strong>에너지(배터리) 부족</strong>으로 멈추게 됩니다.", placeholder: "예: 총 35가 필요하여 에너지 부족으로 멈춤" },
+            { badge: "미션 2: 조건에 맞는 최적 경로", title: "로봇 알파의 똑똑한 청소", text: "<strong>로봇 알파(배터리 40 / 정수 필터 50)</strong>를 보내서 <strong>딱 3개의 구역을 정수</strong>하고 무사히 <strong>End 기지로 돌아와야</strong> 합니다.<br><br>필터를 넘지 않으면서, <strong>가장 배터리를 적게 쓰는 길</strong>은 어디일까요? (Start와 End를 포함하여 지나가는 알파벳을 순서대로 적어주세요.)", answerKeys: ["STARTACEEND", "ACEEND", "START-A-C-E-END", "A-C-E-END"], successMsg: "💡 <strong>완벽한 경로 설계입니다!</strong><br>로봇 알파의 필터(50)로 정수할 수 있는 3곳은 <strong>{A, B, C}</strong>(합 45) 또는 <strong>{A, C, E}</strong>(합 50)입니다.<br>이 중에서 End까지 무사히, 가장 적은 배터리(25)로 돌아올 수 있는 길은 <strong>Start → A(5) → C(5) → E(5) → End(10)</strong> 입니다.", placeholder: "예: START-A-B-C-END" },
+            { badge: "미션 3: 안 되는 길 미리 지우기 (논리적 소거)", title: "로봇 베타의 어려운 임무", text: "<strong>로봇 베타(배터리 30 / 정수 필터 70)</strong>에게 오염이 가장 심한 <strong>D구역과 F구역을 모두 정수</strong>하고 <strong>End로 돌아오라는</strong> 임무를 주었습니다.<br><br>이 임무를 성공할 수 있는 길은 <strong>단 하나뿐</strong>입니다. 배터리와 필터를 잘 계산해서 유일한 정답 경로를 찾아주세요!", answerKeys: ["STARTACDFEND", "ACDFEND", "START-A-C-D-F-END", "A-C-D-F-END"], successMsg: "💡 <strong>정말 훌륭합니다! 정보영재다운 컴퓨팅 사고력이네요.</strong><br>정답 경로는 <strong>Start → A → C → D → F → End</strong> 입니다. (배터리 딱 30 사용)<br><br><strong>[안 되는 길 미리 지우기(가지치기)]</strong><br>1. 필터가 딱 70이므로, D(30)와 F(40) 외에 다른 곳(A나 C)에서 정수를 하면 안 됩니다.<br>2. B 구역으로 가는 길(Start→B→D)은 이미 배터리를 25나 써버려서 F를 거쳐 End로 돌아올 수 없습니다. 그래서 B로 가는 길은 미리 지워버리고 생각해야 합니다.", placeholder: "예: START-A-C-D-F-END" },
+            { badge: "미션 4: 로봇 감마의 극한 도전 (마스터 미션)", title: "가장 많은 오염을 정수하라!", text: "<strong>로봇 감마(배터리 30 / 정수 필터 100)</strong>가 출동합니다! 이번에는 꼭 가야 할 구역이 정해져 있지 않습니다. 대신 배터리가 방전되지 않고 End로 돌아오는 선에서 <strong>오염도 숫자의 합을 가장 높게(최대 기록)</strong> 만들어야 합니다.<br><br>함정에 빠지지 않고 <strong>가장 많은 오염(95)을 정수할 수 있는 유일한 길</strong>을 찾아보세요!", answerKeys: ["STARTACDFEND", "ACDFEND", "START-A-C-D-F-END", "A-C-D-F-END"], successMsg: "🏆 <strong>최종 미션까지 완벽하게 통과했습니다! 진정한 알고리즘 마스터입니다!</strong><br>가장 높은 오염도를 정수하는 길은 <strong>Start → A(10) → C(15) → D(30) → F(40) → End</strong> 입니다.<br>이 길을 통과하면 총 <strong>95</strong>의 오염을 씻어내며 필터(100)를 최대한 활용하고, 배터리는 딱 <strong>30</strong> (5+5+10+5+5)을 사용하여 낭비 없이 기지에 도착합니다.", placeholder: "예: START-A-B-E-F-END" }
+        ];
+        let currentStep = 0;
+        function renderProblem() {
+            const q = questions[currentStep];
+            document.getElementById('stepBadge').textContent = q.badge;
+            document.getElementById('problemTitle').textContent = q.title;
+            document.getElementById('problemText').innerHTML = q.text;
+            document.getElementById('answerInput').placeholder = q.placeholder;
+            document.getElementById('answerInput').value = '';
+            document.getElementById('answerInput').disabled = false;
+            const feedback = document.getElementById('feedbackMessage');
+            feedback.style.display = 'none'; feedback.innerHTML = '';
+            document.getElementById('submitBtn').style.display = 'inline-block';
+            document.getElementById('nextBtn').style.display = 'none';
+        }
+        function openModal() { currentStep = 0; document.getElementById('problemModal').style.display = 'flex'; renderProblem(); }
+        function closeModal() { document.getElementById('problemModal').style.display = 'none'; }
+        window.onclick = function(event) { if (event.target === document.getElementById('problemModal')) closeModal(); }
+        function handleEnter(event) {
+            if (event.key === 'Enter') {
+                if (document.getElementById('submitBtn').style.display !== 'none') checkAnswer();
+                else if (document.getElementById('nextBtn').style.display !== 'none') nextStep();
+            }
+        }
+        function checkAnswer() {
+            const input = document.getElementById('answerInput').value;
+            const feedback = document.getElementById('feedbackMessage');
+            const normalized = input.toUpperCase().replace(/[^A-Z가-힣0-9]/g, '');
+            if (normalized === '') { feedback.style.display = 'block'; feedback.textContent = '답안을 입력해주세요.'; feedback.className = ''; return; }
+            const q = questions[currentStep];
+            let isCorrect = false;
+            if(currentStep === 0) { if(normalized.includes("35") && normalized.includes("부족")) isCorrect = true; }
+            else { isCorrect = q.answerKeys.some(key => normalized.includes(key)); }
+            feedback.style.display = 'block';
+            if (isCorrect) {
+                feedback.innerHTML = q.successMsg; feedback.className = 'correct';
+                document.getElementById('answerInput').disabled = true;
+                document.getElementById('submitBtn').style.display = 'none';
+                document.getElementById('nextBtn').style.display = 'block';
+                document.getElementById('nextBtn').textContent = (currentStep < questions.length - 1) ? '다음 미션으로 ➔' : '모든 미션 완료! (창 닫기)';
+            } else {
+                feedback.textContent = (currentStep === 0) ? '❌ 숫자 35와 함께 "에너지 부족" 또는 "배터리 부족"이라는 이유를 적어주세요.' : '❌ 아쉽네요. 지도를 보며 배터리와 필터를 다시 한번 꼼꼼하게 계산해 볼까요?';
+                feedback.className = 'incorrect';
+            }
+        }
+        function nextStep() { if (currentStep < questions.length - 1) { currentStep++; renderProblem(); } else closeModal(); }
+    <\/script>
+</body>
+</html>`;
+
+        // Item 2 Embed HTML Content
+        const htmlCode2 = `<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>암호 생성기 분석실 - 개별 확인</title><style>
+:root{--ink:#13233b;--navy:#143a69;--blue:#1769aa;--pale:#edf6ff;--line:#cbd9e8;--good:#116b42;--bad:#a52b24;--hint:#795d00}*{box-sizing:border-box}body{margin:0;background:#f2f6fa;color:var(--ink);font-family:"Malgun Gothic","Apple SD Gothic Neo",Arial,sans-serif;line-height:1.7}main{max-width:930px;margin:30px auto;padding:0 18px 45px}.sheet{overflow:hidden;background:#fff;border-radius:18px;box-shadow:0 12px 35px #183f671c}header{padding:34px 42px;background:linear-gradient(130deg,#102f58,#2478b6);color:#fff}h1{margin:0;font-size:32px}header p{margin:5px 0 0;opacity:.9}.section{padding:30px 42px;border-bottom:1px solid #e5edf4}h2{font-size:22px;color:var(--navy);margin:0 0 14px}.case{background:var(--pale);border-left:5px solid var(--blue);padding:16px 19px;border-radius:9px;margin:16px 0}.mono{font-family:Consolas,"Courier New",monospace;font-weight:bold;letter-spacing:.4px;background:#f5f8fb;padding:2px 6px;border-radius:4px}table{border-collapse:collapse;width:100%;margin:12px 0}th,td{border:1px solid var(--line);padding:10px;text-align:center}th{background:#e9f3fc;color:var(--navy)}.q{margin:26px 0;padding:22px;border:1px solid #dbe6f0;border-radius:12px;background:#fcfdff}.q h3{margin:0 0 8px;font-size:19px}.pt{font-size:13px;color:#5d6d80}input,textarea{font:inherit;border:1.5px solid #8fa9c2;border-radius:7px;padding:8px 10px;background:#fff}input:focus,textarea:focus{outline:3px solid #bee0fc;border-color:#1769aa}input.answer{width:180px;text-transform:uppercase;margin:0 4px}.checkrow{margin-top:18px;padding-top:4px}.checkrow button{margin-top:4px}textarea{width:100%;min-height:80px}.feedback{display:none;margin-top:15px;padding:14px 16px;border:1px solid var(--line);background:#f8fafc;border-radius:8px}.feedback.show{display:block}.feedback.good{background:#f0fbf5;border-color:#7fc7a0}.feedback.try{background:#fff9e9;border-color:#dfc36b}.feedback strong{display:block}.good strong{color:var(--good)}.try strong{color:var(--hint)}button{border:0;border-radius:8px;background:#1769aa;color:white;font:inherit;font-weight:bold;padding:10px 15px;cursor:pointer}button:hover{background:#10568e}button.alt{background:#dde8f2;color:#173a63}.actions{padding:28px 42px;background:#f8fafc;display:flex;gap:12px;flex-wrap:wrap}.small{font-size:14px;color:#52667f}details{border:1px solid #a7c9e7;border-radius:10px;background:#f4faff;padding:0 18px}summary{padding:15px 2px;font-size:18px;font-weight:bold;color:var(--navy);cursor:pointer}.key{border-top:1px solid #cddfeb;padding:14px 0}.key:last-child{border-bottom:0}.key h3{margin:0 0 7px;font-size:17px}.steps{margin:7px 0;padding-left:23px}@media(max-width:600px){main{margin:0;padding:0}.sheet{border-radius:0}header,.section,.actions{padding-left:20px;padding-right:20px}h1{font-size:26px}input.answer{display:block;margin:8px 0;width:100%}}
+</style></head><body><main><div class="sheet"><header><h1>암호 생성기 분석실</h1><p>답을 직접 입력하고, 문항마다 힌트를 받아 규칙을 완성해 보세요.</p></header><section class="section"><h2>분석 자료</h2><p>아래 프로그램은 입력 단어를 두 단계로 처리합니다. 실행 기록만 보고 두 단계의 규칙을 추론하세요.</p><table><thead><tr><th>입력</th><th>1단계 변경 비밀번호</th><th>최종 비밀번호</th></tr></thead><tbody><tr><td><span class="mono">CAT</span></td><td><span class="mono">?</span></td><td><span class="mono">UCD</span></td></tr><tr><td><span class="mono">DOG</span></td><td><span class="mono">?</span></td><td><span class="mono">HQE</span></td></tr><tr><td><span class="mono">SUN</span></td><td><span class="mono">?</span></td><td><span class="mono">OWT</span></td></tr></tbody></table><div class="case"><b>조건</b><br>• 알파벳은 Z 다음에 A로 이어집니다.<br>• 모음은 A, E, I, O, U입니다.<br>• 프로그램은 모든 글자에 같은 두 단계의 처리를 적용합니다.</div><p class="small">영어 대문자로 답을 입력하세요. 각 문제의 <b>확인하기</b>를 누르면 현재 답에 맞는 안내가 나옵니다.</p></section><section class="section"><div class="q"><h3>문제 1. 중간 결과 추론 <span class="pt">(2점)</span></h3><p><span class="mono">CAT → UCD</span>가 되는 과정을 분석해, <b>글자 순서를 뒤집기 직전</b>의 중간 결과를 쓰세요.</p><label>CAT → <input id="a1" class="answer" maxlength="3" autocomplete="off"> → UCD</label><div class="checkrow"><button onclick="check(1)">문제 1 정답 확인하기</button></div><div id="f1" class="feedback"></div></div><div class="q"><h3>문제 2. 새 비밀번호 생성 <span class="pt">(2점)</span></h3><p>찾은 전체 규칙을 적용하여 <span class="mono">CODE</span>의 최종 비밀번호를 쓰세요.</p><input id="a2" class="answer" maxlength="4" autocomplete="off" aria-label="CODE 답"><div class="checkrow"><button onclick="check(2)">문제 2 정답 확인하기</button></div><div id="f2" class="feedback"></div></div><div class="q"><h3>문제 3. 끝 글자와 모음 처리 <span class="pt">(2점)</span></h3><p><span class="mono">ZEBRA</span>를 입력했을 때의 최종 비밀번호를 쓰세요. </p><input id="a3" class="answer" maxlength="5" autocomplete="off" aria-label="ZEBRA 답"><div class="checkrow"><button onclick="check(3)">문제 3 정답 확인하기</button></div><div id="f3" class="feedback"></div></div><div class="q"><h3>문제 4. 역변환 <span class="pt">(2점)</span></h3><p>최종 비밀번호가 <span class="mono">GGCT</span>일 때, 원래 입력 단어를 복원하세요.</p><input id="a4" class="answer" maxlength="4" autocomplete="off" aria-label="GGCT 원문"><div class="checkrow"><button onclick="check(4)">문제 4 정답 확인하기</button></div><div id="f4" class="feedback"></div></div><div class="q"><h3>문제 5. 오류 기록 검증 <span class="pt">(2점)</span></h3><p>한 실행 기록에 <span class="mono">MATH → IVCN</span>이라고 적혀 있습니다. 이 기록은 오류입니다. 올바른 최종 비밀번호를 쓰세요.</p><input id="a5" class="answer" maxlength="4" autocomplete="off" aria-label="MATH 답"><div class="checkrow"><button onclick="check(5)">문제 5 정답 확인하기</button></div><div id="f5" class="feedback"></div></div><div class="q"><h3>분석 노트 <span class="pt">(자기 점검용)</span></h3><p>찾아낸 두 단계 규칙을 자신의 말로 설명해 보세요.</p><textarea placeholder="1단계: ...&#10;2단계: ..."></textarea></div></section><section class="section"><h2>정답과 전체 해설</h2><p class="small">모든 문제를 풀어 본 뒤 아래를 열어 확인하세요.</p><details><summary>정답과 해설 열기</summary><div class="key"><h3>핵심 규칙</h3><p>1단계: <b>자음은 알파벳 순서로 1칸 뒤</b>, <b>모음은 2칸 뒤</b>로 이동합니다. 2단계: 바뀐 글자들의 <b>순서를 거꾸로 뒤집습니다.</b></p></div><div class="key"><h3>문제 1 정답: DCU</h3><p>C→D, A→C, T→U이므로 중간 결과는 DCU입니다. 이를 뒤집으면 UCD입니다.</p></div><div class="key"><h3>문제 2 정답: GEQD</h3><p>CODE → DQEG → GEQD입니다. 특히 O와 E는 모음이므로 각각 2칸 이동합니다.</p></div><div class="key"><h3>문제 3 정답: CSGCA</h3><p>ZEBRA → AGCSC → CSGCA입니다. Z는 1칸 뒤로 가면 A가 됩니다.</p></div><div class="key"><h3>문제 4 정답: SAFE</h3><p>먼저 GGCT를 뒤집어 TCGG로 만듭니다. 이후 반대 방향으로 바꾸면 T→S, C→A, G→F, G→E가 되어 SAFE입니다.</p></div><div class="key"><h3>문제 5 정답: IUCN</h3><p>MATH → NCUI → IUCN입니다. 제시된 IVCN은 두 번째 글자가 잘못되었습니다.</p></div></details></section><div class="actions"><button class="alt" onclick="resetAll()">처음부터 다시 풀기</button></div></div></main><script>
+const ans={1:'DCU',2:'GEQD',3:'CSGCA',4:'SAFE',5:'IUCN'};const hints={1:['먼저 UCD가 어떤 중간 결과를 뒤집은 것인지 생각해 보세요. 세 글자의 순서를 반대로 쓰는 것부터 시작하세요.','CAT의 각 글자를 따로 보세요. C와 T는 자음, A는 모음입니다. 자음과 모음의 이동 칸 수가 다릅니다.'],2:['CODE를 바로 뒤집지 말고, 먼저 한 글자씩 바꾼 4글자 중간 결과를 종이에 쓰세요.','O와 E는 모음입니다. 두 글자는 자음 D, C와 같은 칸 수만큼 움직이지 않습니다.'],3:['ZEBRA에서 먼저 Z, E, A 세 글자만 따로 변환해 보세요. 이 세 글자가 핵심입니다.','Z 다음은 A입니다. E와 A는 모음이므로 다른 글자보다 한 칸 더 이동합니다. 중간 결과를 모두 쓴 뒤 뒤집으세요.'],4:['역변환은 마지막 단계부터 거꾸로 풀어야 합니다. 먼저 GGCT의 글자 순서를 뒤집으세요.','뒤집은 결과의 각 글자를 앞쪽으로 되돌리세요. 출력 T는 어떤 자음에서 왔고, 출력 C는 어떤 모음에서 왔는지 생각해 보세요.'],5:['MATH를 한 글자씩 바꾼 중간 결과를 먼저 작성하고, 맨 마지막에 뒤집으세요.','A는 모음이므로 2칸 이동합니다. 제시된 IVCN의 두 번째 글자와 비교해 보세요.']};let tries={1:0,2:0,3:0,4:0,5:0};function get(n){return (document.getElementById('a'+n).value||'').trim().toUpperCase()}function show(n,type,text){let e=document.getElementById('f'+n);e.className='feedback show '+type;e.innerHTML='<strong>'+({good:'정답입니다.',try:'다시 생각해 볼까요?'}[type])+'</strong>'+text}function check(n){let v=get(n);if(v===ans[n]){show(n,'good','정확합니다. 다음 문제로 넘어가도 좋아요.');return}tries[n]++;if(!v){show(n,'try','아직 답이 비어 있어요. '+hints[n][0]);return}let h=hints[n][Math.min(tries[n]-1,hints[n].length-1)];show(n,'try','입력한 답은 정답이 아닙니다. '+h)}function resetAll(){document.querySelectorAll('input,textarea').forEach(e=>e.value='');document.querySelectorAll('.feedback').forEach(e=>{e.className='feedback';e.innerHTML=''});tries={1:0,2:0,3:0,4:0,5:0};document.querySelector('details').open=false;scrollTo({top:0,behavior:'smooth'})}
+<\/script></body></html>`;
+
+        // Item Config Meta Data
+        const items = [
+            {
+                id: 1,
+                type: 'html',
+                badgeText: 'HTML 직접 구현',
+                badgeStyle: 'bg-emerald-100 text-emerald-800 border-emerald-300',
+                title: '자율주행 정수 로봇 길 찾기',
+                description: '[초등 5학년 심화] 인지특성을 반영한 4단계 알고리즘 최적화 문항',
+                htmlData: htmlCode1,
+                url: null
+            },
+            {
+                id: 2,
+                type: 'html',
+                badgeText: 'HTML 직접 구현',
+                badgeStyle: 'bg-blue-100 text-blue-800 border-blue-300',
+                title: '암호 생성기 분석실',
+                description: '[초중등 공통] 규칙 추론 및 역변환 사고력 문제 해결 인터랙티브 앱',
+                htmlData: htmlCode2,
+                url: null
+            },
+            {
+                id: 3,
+                type: 'external',
+                badgeText: '외부 웹 링크',
+                badgeStyle: 'bg-purple-100 text-purple-800 border-purple-300',
+                title: '바이브코딩 필란독 CT2.0',
+                description: 'y2round-git.github.io/Vibecoding_pilandokct20 - CT2.0 학습 웹 플랫폼',
+                htmlData: null,
+                url: 'https://y2round-git.github.io/Vibecoding_pilandokct20/'
+            },
+            {
+                id: 4,
+                type: 'external',
+                badgeText: '외부 웹 링크',
+                badgeStyle: 'bg-amber-100 text-amber-800 border-amber-300',
+                title: '초중등 CT2.0 문제집 플랫폼',
+                description: 'devvbear.github.io/ct/ - CT2.0 문항 모음 및 실습 플랫폼',
+                htmlData: null,
+                url: 'https://devvbear.github.io/ct/'
+            }
+        ];
+
+        let currentIndex = 0;
+
+        // Switch Active Display Content Tab
+        function switchTab(index) {
+            currentIndex = index;
+            const item = items[index];
+
+            // Update UI Sidebar highlight
+            for (let i = 0; i < 4; i++) {
+                const btn = document.getElementById(`nav-btn-${i + 1}`);
+                if (i === index) {
+                    btn.classList.add('ring-2', 'ring-brand-500', 'bg-brand-50/50', 'border-brand-300');
+                    btn.classList.remove('bg-white', 'border-slate-200');
+                } else {
+                    btn.classList.remove('ring-2', 'ring-brand-500', 'bg-brand-50/50', 'border-brand-300');
+                    btn.classList.add('bg-white', 'border-slate-200');
+                }
+            }
+
+            // Update Header Display Texts
+            document.getElementById('displayTitle').textContent = item.title;
+            document.getElementById('displayDescription').textContent = item.description;
+            document.getElementById('mobileCurrentTitle').textContent = item.title;
+
+            const badge = document.getElementById('displayBadge');
+            badge.textContent = item.badgeText;
+            badge.className = `text-xs font-bold px-2.5 py-0.5 rounded-md border ${item.badgeStyle}`;
+
+            // Update Direct Link Button Action
+            const directLink = document.getElementById('externalDirectLink');
+            const externalNotice = document.getElementById('externalNotice');
+
+            if (item.type === 'external') {
+                directLink.href = item.url;
+                externalNotice.classList.remove('hidden');
+            } else {
+                directLink.href = 'javascript:openCurrentInNewTab()';
+                externalNotice.classList.add('hidden');
+            }
+
+            // Render Iframe Content
+            const iframe = document.getElementById('mainViewer');
+            if (item.type === 'html') {
+                iframe.removeAttribute('src');
+                iframe.srcdoc = item.htmlData;
+            } else {
+                iframe.removeAttribute('srcdoc');
+                iframe.src = item.url;
+            }
+
+            // Close mobile menu if open
+            const sidebar = document.getElementById('sidebar');
+            const backdrop = document.getElementById('mobileBackdrop');
+            if (!sidebar.classList.contains('-translate-x-full')) {
+                toggleMobileMenu();
+            }
+        }
+
+        // Open current active item in a new browser tab
+        function openCurrentInNewTab() {
+            const item = items[currentIndex];
+            if (item.type === 'external') {
+                window.open(item.url, '_blank');
+            } else {
+                const newWin = window.open('', '_blank');
+                newWin.document.write(item.htmlData);
+                newWin.document.close();
+            }
+        }
+
+        // Reload active iframe
+        function reloadIframe() {
+            switchTab(currentIndex);
+        }
+
+        // Mobile Menu Drawer Handler
+        function toggleMobileMenu() {
+            const sidebar = document.getElementById('sidebar');
+            const backdrop = document.getElementById('mobileBackdrop');
+            sidebar.classList.toggle('-translate-x-full');
+            backdrop.classList.toggle('hidden');
+        }
+
+        // Toggle Fullscreen View
+        function toggleFullscreen() {
+            const icon = document.getElementById('fullscreenIcon');
+            const text = document.getElementById('fullscreenText');
+            
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().then(() => {
+                    icon.className = 'fa-solid fa-compress';
+                    text.textContent = '창 모드';
+                }).catch(err => {
+                    console.log('Fullscreen error:', err);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen().then(() => {
+                        icon.className = 'fa-solid fa-expand';
+                        text.textContent = '전체 화면';
+                    });
+                }
+            }
+        }
+
+        // Initialize default view on load
+        window.addEventListener('DOMContentLoaded', () => {
+            switchTab(0);
+        });
+    </script>
+</body>
+</html>
